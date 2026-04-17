@@ -1,0 +1,26 @@
+
+  frontend:
+    container_name: frontend
+    hostname: frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: dev                   # hot-reload, all deps
+    volumes:
+      - ./frontend:/app:cached
+      - /app/node_modules           # prevents host node_modules from
+                                    # shadowing the container's node_modules
+    environment:
+      - NEXT_PUBLIC_API_VERSION
+      - NODE_ENV
+      - BACKEND_URL
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - app-net
