@@ -1,4 +1,4 @@
-name: 3. CD
+name: 2. CD
 
 on:
   push:
@@ -7,17 +7,17 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE: ${{ github.repository }}
+  IMAGE: ${{ github.repository }}-frontend
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
-    environment: development
     permissions:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v4    # checks out the tagged commit
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
